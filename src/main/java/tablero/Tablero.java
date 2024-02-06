@@ -13,7 +13,6 @@ public class Tablero {
 	private int cantBombas;
 	private Set<MiPunto> bombas;
 	private Map<MiPunto, Integer> numeros;
-	private static final Scanner lector = new Scanner(System.in);
 	
 	private Tablero (int filas, int columnas,int cantBombas) {
 		this.filas = filas;
@@ -21,9 +20,7 @@ public class Tablero {
 		this.cantBombas = cantBombas;
 	}
 	
-	static public Tablero crear_tablero() {
-		System.out.println("Seleccione una dificultad:\n1- Fácil\n2- Medio\n3- Difícil");
-		int dificultad = obtener_dificultad();
+	static public Tablero crear_tablero(int dificultad) {
 		int filas = 9, columnas = 9, cantBombas = 10;
 		switch(dificultad) {
 			case 1:
@@ -45,19 +42,6 @@ public class Tablero {
 		return  new Tablero(filas, columnas, cantBombas);
 	}
 	
-	static private int obtener_dificultad() {
-		int retorno = 0;
-		while(retorno == 0) {
-			int ingreso = lector.nextInt();
-			if(ingreso < 0 || ingreso > 3) {
-				System.out.println("Dificultad no valida!\nIngrese una dificultad:");
-			}else {
-				retorno = ingreso;
-			}
-		}
-		return retorno;
-	}
-	
 	public int get_filas() {
 		return filas;
 	}
@@ -77,17 +61,8 @@ public class Tablero {
 	public Map<MiPunto, Integer> get_numeros() {
 		return numeros;
 	}
-	
- 	public void iniciar_partida() {
-		System.out.println("Ingrese una coordenada x:");
-		int coordenadaX = lector.nextInt();
-		System.out.println("Ingrese una coordenada y:");
-		int coordenadaY = lector.nextInt();
-		MiPunto inicio = new MiPunto(coordenadaX, coordenadaY);
-		colocar_bombas(inicio);
- 	}
 
-	private void colocar_bombas(MiPunto inicio) {
+	public void iniciar_partida(MiPunto inicio) {
 		Set<MiPunto> prohibidas = posiciones_prohibidas(inicio);
 		MiPunto bomba;
 		bombas = new HashSet<>();
@@ -151,7 +126,7 @@ public class Tablero {
 			for(int y = 0; y < filas; y++) {
 				casilla.setear(x,y);
 				if(bombas.contains(casilla)) {
-					salida.append("B\t");
+					salida.append("💣\t");
 				}else if(numeros.containsKey(casilla)){
 					salida.append(numeros.get(casilla) + "\t");
 				}else {
