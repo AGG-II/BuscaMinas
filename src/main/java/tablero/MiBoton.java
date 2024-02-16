@@ -5,7 +5,7 @@ import javax.swing.JButton;
 public class MiBoton extends JButton {
 
 	private MiPunto coordenada;
-	private String estado = "Nada";
+	private EstadosBoton estado = EstadosBoton.NADA;
 	public MiBoton(MiPunto coordenada) {
 		this.coordenada = coordenada;
 	}
@@ -14,10 +14,10 @@ public class MiBoton extends JButton {
 		return coordenada;
 	}
 	
-	public String get_estado() {
+	public EstadosBoton get_estado() {
 		return estado;
 	}
-	public void set_estado(String estado) {
+	public void set_estado(EstadosBoton estado) {
 		this.estado = estado;
 	} 
 	

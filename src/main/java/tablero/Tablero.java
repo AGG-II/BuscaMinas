@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
 
 public class Tablero {
@@ -20,20 +19,20 @@ public class Tablero {
 		this.cantBombas = cantBombas;
 	}
 	
-	static public Tablero crear_tablero(int dificultad) {
+	static public Tablero crear_tablero(Dificultades diff) {
 		int filas = 9, columnas = 9, cantBombas = 10;
-		switch(dificultad) {
-			case 1:
+		switch(diff) {
+			case FACIL:
 				filas = 9;
 				columnas = 9;
 				cantBombas = 10;
 				break;
-			case 2:
+			case MEDIO:
 				filas = 16;
 				columnas = 16;
 				cantBombas = 40;
 				break;
-			case 3:
+			case DIFICIL:
 				filas = 16;
 				columnas = 30;
 				cantBombas = 99;

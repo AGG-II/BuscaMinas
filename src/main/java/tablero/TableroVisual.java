@@ -1,6 +1,7 @@
 package tablero;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -14,26 +15,24 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class TableroVisual extends JFrame {
-	final Dimension d = new Dimension(800,600);
+	final Dimension d = new Dimension(1000,750);
 	private Tablero tablero = null;
 	private Map<MiPunto, MiBoton> botones= new HashMap<>();
 	private int x;
 	private int y;
 	private int cantidadCasillas;
 	
-	public TableroVisual(int x, int y) {
+	public TableroVisual(int x, int y, Dificultades diff) {
 	this.x = x;
 	this.y = y;
 	this.cantidadCasillas = x * y;
-	this.tablero = Tablero.crear_tablero(1);
+	this.tablero = Tablero.crear_tablero(diff);
 	setMinimumSize(d);
 	setPreferredSize(d);
 	setLocationRelativeTo(null);
@@ -47,7 +46,7 @@ public class TableroVisual extends JFrame {
 		for(int j = 0; j < y; j++) {
 	        MiPunto coordenada = new MiPunto(i,j);
 	        MiBoton boton = new MiBoton(coordenada);
-	       /*inicio*/ boton.addActionListener(new ActionListener() {
+	       boton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try{
 						String contenido = obtener_casilla(boton);
@@ -58,23 +57,21 @@ public class TableroVisual extends JFrame {
 					}
 					
 				}
-			});// final
+			});
 	       boton.addMouseListener(new MouseAdapter() {
-	            public void mouseClicked(MouseEvent e) {
-	                // Check if the right mouse button is clicked (Button3 for right click)
+	            public void mouseReleased(MouseEvent e) {
 	                if (SwingUtilities.isRightMouseButton(e)) {
-	                	if(boton.get_estado() == "Nada") {
-	                		boton.set_estado("Bandera");
+	                	if(boton.get_estado() == EstadosBoton.NADA) {
+	                		boton.set_estado(EstadosBoton.BANDERA);
 	                		boton.setText("🚩");
-	                	}else if(boton.get_estado() == "Bandera"){
-	                		boton.set_estado("Nada");
+	                	}else if(boton.get_estado() == EstadosBoton.BANDERA){
+	                		boton.set_estado(EstadosBoton.NADA);
 	                		boton.setText("");
 	                	}
 	                	
 	                }
 	            }
 	        });
-			// boton.setText(i + " , " + j);
 	        botones.put(coordenada, boton);
 			panel.add(boton);
 		}
@@ -89,7 +86,7 @@ public class TableroVisual extends JFrame {
 	}
 
 	private String obtener_casilla(MiBoton boton) {
-		String retorno = "∅";
+		String retorno = "";
 		Set<MiPunto> bombas= tablero.get_bombas();
 		Map<MiPunto, Integer> numeros = tablero.get_numeros();
 		MiPunto casilla = boton.get_coordenada();
@@ -102,16 +99,17 @@ public class TableroVisual extends JFrame {
 	}
 	
 	private void jugada(MiBoton boton, String contenido) {
-		if(boton.get_estado() == "Apretado" || boton.get_estado() == "Bandera"/*-------------------------------!HACER UN ENUM!------------------------------------------------------------------------*/) {
+		if(boton.get_estado() == EstadosBoton.APRETADO || boton.get_estado() == EstadosBoton.BANDERA) {
 			return;
 		}
-		boton.set_estado("Apretado");
+		boton.setBackground(new Color(200,200,200));
+		boton.set_estado(EstadosBoton.APRETADO);
 		boton.setText(contenido);
 		switch(contenido) {
 		case "💣":
 			perdio();
 			break;
-		case "∅":
+		case "":
 			toco_vacio(boton);
 			break;
 		}

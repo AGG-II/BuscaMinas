@@ -5,9 +5,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -77,16 +74,18 @@ public class PantallaInicio extends JFrame {
 		iniciar.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
+				TableroVisual tablero;
 				if (facil.isSelected()) {
-                    System.out.println("Elegiste fácil");
-                    System.exit(0);
+                    tablero = new TableroVisual(9,9, Dificultades.FACIL);
                 } else if (medio.isSelected()) {
-                    System.out.println("Elegiste medio");
-                    System.exit(0);
+                	tablero = new TableroVisual(16,16, Dificultades.MEDIO);
                 } else if (dificil.isSelected()) {
-                    System.out.println("Elegiste difícil");
-                    System.exit(0);
+                	tablero = new TableroVisual(30,16, Dificultades.DIFICIL);
+                } else {
+                	return;
                 }
+				setVisible(false);
+				tablero.setVisible(true);
 			}
 		});
 	}
